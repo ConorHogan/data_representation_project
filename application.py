@@ -1,67 +1,66 @@
 #!flask/bin/python
 from flask import Flask, jsonify, request, abort
-from bookDAO import bookDAO # file where the functions to interact with the database are stored
+from ticketDAO import ticketDAO # file where the functions to interact with the database are stored
 
 app = Flask(__name__,static_url_path='',static_folder='.')
 
 
-@app.route('/books')
+@app.route('/tickets')
 def getAll():
-  results = bookDAO.getAll()
+  results = ticketDAO.getAll()
   return jsonify(results)
-# C:\Users\Conor>curl "http://127.0.0.1:5000/books"
+# C:\Users\Conor>curl "http://127.0.0.1:5000/tickets"
 
-@app.route('/books/<int:id>')
+@app.route('/tickets/<int:id>')
 def findByID(id):
-  foundBook = bookDAO.findByID(id)
-  return jsonify(foundBook)
-# C:\Users\Conor>curl "http://127.0.0.1:5000/books/3"
+  foundTicket = ticketDAO.findByID(id)
+  return jsonify(foundTicket)
+# C:\Users\Conor>curl "http://127.0.0.1:5000/tickets/1"
 
 
-@app.route('/books', methods=['POST'])
+@app.route('/tickets', methods=['POST'])
 def create():
   if not request.json:
     abort(400)
   # other checking e.g properly formated
-  book = {
-    "id":nextID,
-    "Title":request.json['Title'],
-    "Author":request.json['Author'],
-    "Price":request.json['Price']
+  ticket = {
+    "Company":request.json['Company'],
+    "Description":request.json['Description'],
+    "Priority":request.json['Priority']
   }
-  values = (book['Title'],book['Author'], book['Price'])
-  newID = bookDAO.create(values)
-  book['id'] = newID
-  return jsonify(book)
-# curl -i -H "Content-Type:application/json" -X POST -d "{\"Title\":\"hello\",\"Author\":\"someone\",\"Price\":123}" http://127.0.0.1:5000/books
+  values = (ticket['Company'],ticket['Description'], ticket['Priority'])
+  newID = ticketDAO.create(values)
+  ticket['id'] = newID
+  return jsonify(ticket)
+# curl -i -H "Content-Type:application/json" -X POST -d "{\"Company\":\"Google\",\"Description\":\"My tummy hurts\",\"Priority\":\"High\",\"Due Date\":\"2019-10-30\"}" http://127.0.0.1:5000/tickets
 
 
-@app.route('/books/<int:id>', methods=['PUT'])
+@app.route('/tickets/<int:id>', methods=['PUT'])
 def update(id):
-  foundBook = bookDAO.findByID(id)
-  if not foundBook:
+  foundTicket = ticketDAO.findByID(id)
+  if not foundTicket:
     abort(404)
   if not request.json:
     abort(400)
   reqJson = request.json
-  if 'Price' in reqJson and type(reqJson['Price']) is not int:
-    abort(400)
-  if 'Title' in reqJson:
-    foundBook['Title'] = reqJson['Title']
-  if 'Author' in reqJson:
-    foundBook['Author'] = reqJson['Author']
-  if 'Price' in reqJson:
-    foundBook['Price'] = reqJson['Price']
-  values = (foundBook['Title'],foundBook['Author'], foundBook['Price'], foundBook['id'])
-  bookDAO.update(values)
-  return jsonify(foundBook)
-# C:\Users\Conor>curl -i -H "Content-Type:application/json" -X PUT -d "{\"Author\":\"Jimmy\"}" http://127.0.0.1:5000/books/1
+  # if 'Price' in reqJson and type(reqJson['Price']) is not int:
+  #   abort(400)
+  if 'Company' in reqJson:
+    foundTicket['Title'] = reqJson['Title']
+  if 'Description' in reqJson:
+    foundTicket['Description'] = reqJson['Description']
+  if 'Priority' in reqJson:
+    foundTicket['Priority'] = reqJson['Priority']
+  values = (foundTicket['Company'],foundTicket['Description'], foundTicket['Priority'],foundTicket['id'])
+  ticketDAO.update(values)
+  return jsonify(foundTicket)
+# C:\Users\Conor>curl -i -H "Content-Type:application/json" -X PUT -d "{\"Due Date\":\"2017-12-05\"}" http://127.0.0.1:5000/tickets/3
 
-@app.route('/books/<int:id>', methods=['DELETE'])
+@app.route('/tickets/<int:id>', methods=['DELETE'])
 def delete(id):
-  bookDAO.delete(id)
+  ticketDAO.delete(id)
   return jsonify({"done":True})
-# C:\Users\Conor>curl -X DELETE "http://127.0.0.1:5000/books/1"
+# C:\Users\Conor>curl -X DELETE "http://127.0.0.1:5000/tickets/3"
 # {"done":true}
 
 if __name__=='__main__':

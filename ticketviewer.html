@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>View Tickets</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+      <h1>Tickets</h1>
+      <div> <button  id="showCreateButton" class="btn btn-primary btn-block" onclick="showCreate()">Create</button></div>
+      <div>
+          <table class="table" id="ticketTable">
+              <tr>
+                      <th>id</th>
+                      <th>Company</th>
+                      <th>Decription</th>
+                      <th>Priority</th>
+                      <th>Update</th>
+                      <th>Delete</th>
+              </tr>
+          </table>
+      </div>
+      <div class="form-group" id='createUpdateForm' style="display: none">
+              <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Ticket</h2>
+              <input type="hidden" name="id"/>
+              Company <input class="form-control" type="text" name="Company" /><br/>
+              Description <input class="form-control" type="text" name="Description" /><br/>
+              Priority <select class="form-control" id="p_selector" name="Priority">
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select><br/>
+              <span><button class="btn btn-success btn-sm"  id="doCreateButton" onclick="doCreate()">Create</button></span>
+              <span><button class="btn btn-warning btn-sm" id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+      </div>
+  </body>
+  <script>
+  function showCreate(){
+      document.getElementById('showCreateButton').style.display="none"
+      document.getElementById('ticketTable').style.display="none"
+      document.getElementById('createUpdateForm').style.display="block"
+      document.getElementById('createLabel').style.display="inline"
+      document.getElementById('updateLabel').style.display="none"
+      document.getElementById('doCreateButton').style.display="block"
+      document.getElementById('doUpdateButton').style.display="none"
+  }
+  function showViewAll(){
+      document.getElementById('showCreateButton').style.display="block"
+      document.getElementById('ticketTable').style.display="table"
+      document.getElementById('createUpdateForm').style.display="none"
+  }
+  function showUpdate(buttonElement){
+      document.getElementById('showCreateButton').style.display="none"
+      document.getElementById('ticketTable').style.display="none"
+      document.getElementById('createUpdateForm').style.display="block"
+      document.getElementById('createLabel').style.display="none"
+      document.getElementById('updateLabel').style.display="inline"
+      document.getElementById('doCreateButton').style.display="none"
+      document.getElementById('doUpdateButton').style.display="block"
+      var rowElement = buttonElement.parentNode.parentNode
+
+
+      var ticket = getTicketFromRow(rowElement)
+      populateFormWithTicket(ticket)
+  }
+  function doCreate(){
+      var form = document.getElementById('createUpdateForm')
+      var ticket = {}
+      ticket.Company = form.querySelector('input[name="Company"]').value
+      ticket.Description = form.querySelector('input[name="Description"]').value
+      ticket.Priority = $("#p_selector option:selected").text()
+      console.log(JSON.stringify(ticket))
+      createTicketAjax(ticket)
+  }
+  function doUpdate(){
+      var ticket = getTicketFromForm();
+      var rowElement = document.getElementById(ticket.id)
+      updateTicketAjax(ticket)
+      setTicketInRow(rowElement,ticket)
+
+      clearForm()
+      showViewAll()
+  }
+  function doDelete(r){
+      var tableElement = document.getElementById('ticketTable')
+      var rowElement = r.parentNode.parentNode;
+      var index = r.parentNode.parentNode.rowIndex;
+      deleteTicketAjax(rowElement.getAttribute("id"));
+      tableElement.deleteRow(index);
+  }
+  function addTicketToTable(ticket){
+      var tableElement = document.getElementById('ticketTable')
+      var rowElement = tableElement.insertRow(-1)
+      rowElement.setAttribute('id',ticket.id)
+      var cell1 = rowElement.insertCell(0);
+      cell1.innerHTML = ticket.id
+      var cell2 = rowElement.insertCell(1);
+      cell2.innerHTML = ticket.Company
+      var cell3 = rowElement.insertCell(2);
+      cell3.innerHTML = ticket.Description
+      var cell4 = rowElement.insertCell(3);
+      cell4.innerHTML = ticket.Priority
+      var cell5 = rowElement.insertCell(4);
+      cell5.innerHTML = '<button class="btn btn-success btn-sm" onclick="showUpdate(this)">Update</button>'
+      var cell6 = rowElement.insertCell(5);
+      cell6.innerHTML = '<button class="btn btn-danger btn-sm" onclick=doDelete(this)>Delete</button>'
+  }
+  function clearForm(){
+      var form = document.getElementById('createUpdateForm')
+      form.querySelector('input[name="Company"]').value=''
+      form.querySelector('input[name="Description"]').value=''
+      form.querySelector('select[name="Priority"]').value=''
+  }
+  function getTicketFromRow(rowElement){
+      var ticket ={}
+      ticket.id = rowElement.getAttribute('id')
+      ticket.Company = rowElement.cells[1].firstChild.textContent
+      ticket.Description = rowElement.cells[2].firstChild.textContent
+      ticket.Priority = rowElement.cells[3].firstChild.textContent
+      return ticket
+  }
+  function setTicketInRow(rowElement, ticket){
+      rowElement.cells[0].firstChild.textContent= ticket.id
+      rowElement.cells[1].firstChild.textContent= ticket.Company
+      rowElement.cells[2].firstChild.textContent= ticket.Description
+      rowElement.cells[3].firstChild.textContent= ticket.Priority
+  }
+  function populateFormWithTicket(ticket){
+      var form = document.getElementById('createUpdateForm')
+      form.querySelector('input[name="id"]').disabled = true
+
+      form.querySelector('input[name="id"]').value = ticket.id
+      form.querySelector('input[name="Company"]').value= ticket.Company
+      form.querySelector('input[name="Description"]').value= ticket.Description
+      form.querySelector('select[name="Priority"]').value= ticket.Priority
+      return ticket
+  }
+  function getTicketFromForm(){
+      var form = document.getElementById('createUpdateForm')
+      var ticket = {}
+      ticket.id = form.querySelector('input[name="id"]').value
+      ticket.Company = form.querySelector('input[name="Company"]').value
+      ticket.Description = form.querySelector('input[name="Description"]').value
+      ticket.Priority = form.querySelector('select[name="Priority"]').value
+      console.log(JSON.stringify(ticket))
+      return ticket
+  }
+  function getAllAjax(){
+    host= "http://127.0.0.1:5000" // window.location.origin
+    $.ajax({
+        "url": host+"/tickets",
+        "method":"GET",
+        "data":"",
+        "dataType":"JSON",
+        "success":function(result){
+            //console.log(result);
+            for (ticket of result){
+                addTicketToTable(ticket);
+            }
+        },
+        "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+        }
+    });
+  }
+  function createTicketAjax(ticket){
+      console.log(JSON.stringify(ticket));
+      host= "http://127.0.0.1:5000" //window.location.origin
+      $.ajax({
+          "url":host+"/tickets",
+          "method":"POST",
+          "data":JSON.stringify(ticket),
+          "dataType":"JSON",
+          contentType: "application/json; charset=utf-8",
+          "success":function(result){
+              //console.log(result);
+              ticket.id = result.id
+              addTicketToTable(ticket)
+              clearForm()
+              showViewAll()
+          },
+          "error":function(xhr,status,error){
+              console.log("error: "+status+" msg:"+error);
+          }
+      });
+  }
+  function updateTicketAjax(ticket){
+    console.log(JSON.stringify(ticket));
+    host= "http://127.0.0.1:5000"//window.location.origin
+      $.ajax({
+          "url":host+"/Tickets/"+encodeURI(ticket.id),
+          "method":"PUT",
+          "data":JSON.stringify(ticket),
+          "dataType":"JSON",
+          contentType: "application/json; charset=utf-8",
+          "success":function(result){
+              //console.log(result);
+          },
+          "error":function(xhr,status,error){
+              console.log("error: "+status+" msg:"+error);
+          }
+      });
+  }
+  function deleteTicketAjax(id){
+      //console.log(JSON.stringify('deleting'+id));
+      host="http://127.0.0.1:5000"// window.location.origin
+      $.ajax({
+          "url":host+"/tickets/"+encodeURI(id),
+          "method":"DELETE",
+          "data":"",
+          "dataType":"JSON",
+          contentType: "application/json; charset=utf-8",
+          "success":function(result){
+              //console.log(result);
+          },
+          "error":function(xhr,status,error){
+              console.log("error: "+status+" msg:"+error);
+          }
+      });
+  }
+  getAllAjax();
+
+  </script>
+</html>

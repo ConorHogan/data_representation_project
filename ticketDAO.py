@@ -1,8 +1,8 @@
-"""sample database interaction programme for books"""
+"""database interaction for CS tickets"""
 
 import mysql.connector
 import dbconfig as cfg # import a config file "dbconfig.py"
-class BookDAO:
+class TicketDAO:
   db = ""
 
   def __init__(self):
@@ -15,7 +15,7 @@ class BookDAO:
 
   def create(self, values):
     cursor = self.db.cursor()
-    sql = "insert into book (title, author, price) values (%s, %s, %s)"
+    sql = "insert into tickets (company, description, priority) values (%s, %s, %s)"
     cursor.execute(sql, values)
 
     self.db.commit() # send to database
@@ -23,7 +23,7 @@ class BookDAO:
 
   def getAll(self):
     cursor = self.db.cursor()
-    sql = "select * from book"
+    sql = "select * from tickets"
     cursor.execute(sql)
     results = cursor.fetchall() # get from database
     returnArray = []
@@ -33,7 +33,7 @@ class BookDAO:
 
   def findByID(self, id):
     cursor = self.db.cursor()
-    sql = "select * from book where id = %s"
+    sql = "select * from tickets where id = %s"
     values = (id,) # values must be a tuple, hence the comma
 
     cursor.execute(sql,values)
@@ -42,20 +42,20 @@ class BookDAO:
 
   def update(self, values):
     cursor = self.db.cursor()
-    sql="update book set title = %s, author=%s, price=%s where id = %s"
+    sql="update tickets set company = %s, description=%s, priority=%s where id = %s"
     cursor.execute(sql,values)
     self.db.commit()
 
   def delete(self, id):
     cursor = self.db.cursor()
-    sql="delete from book where id = %s"
+    sql="delete from tickets where id = %s"
     values = (id,)
     cursor.execute(sql, values)
     self.db.commit()
     print("delete done")
 
   def convertToDictionary(self, result):
-    colnames=['id','Title','Author','Price']
+    colnames=['id','Company','Description','Priority']
     item = {}
 
     if result:
@@ -64,4 +64,4 @@ class BookDAO:
         item[colName] = value
     return item
 
-bookDAO = BookDAO()
+ticketDAO = TicketDAO()
