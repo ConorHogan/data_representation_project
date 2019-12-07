@@ -8,8 +8,8 @@ class BookDAO:
   def __init__(self):
     self.db = mysql.connector.connect(
     host=cfg.mysql['host'],
-    user=cfg.mysql['username']
-    password=cfg.mysql['password']
+    user=cfg.mysql['username'],
+    password=cfg.mysql['password'],
     database=cfg.mysql['database']
     )
 
@@ -18,25 +18,23 @@ class BookDAO:
     sql = "insert into book (title, author, price) values (%s, %s, %s)"
     cursor.execute(sql, values)
 
-    self.db.commit()
+    self.db.commit() # send to database
     return cursor.lastrowid
 
   def getAll(self):
     cursor = self.db.cursor()
     sql = "select * from book"
     cursor.execute(sql)
-    results = cursor.fetchall()
+    results = cursor.fetchall() # get from database
     returnArray = []
-    #print(results)
     for result in results:
-      #print(result)
       returnArray.append(self.convertToDictionary(result))
     return returnArray
 
   def findByID(self, id):
     cursor = self.db.cursor()
     sql = "select * from book where id = %s"
-    values = (id,)
+    values = (id,) # values must be a tuple, hence the comma
 
     cursor.execute(sql,values)
     result = cursor.fetchone()
