@@ -144,7 +144,7 @@
   }
   function getAllAjax(){
     $.ajax({
-        "url": "https://127.0.0.1:5000/books",
+        "url": "http://127.0.0.1:5000/books",
         "method":"GET",
         "data":"",
         "dataType":"JSON",
@@ -162,7 +162,8 @@
   function createBookAjax(book){
       console.log(JSON.stringify(book));
       $.ajax({
-          "url":"https://127.0.0.1:5000/books",
+          "url":"http://127.0.0.1:5000/books",
+          
           "method":"POST",
           "data":JSON.stringify(book),
           "dataType":"JSON",
@@ -182,7 +183,7 @@
   function updateBookAjax(book){
     console.log(JSON.stringify(book));
       $.ajax({
-          "url":"https://127.0.0.1:5000/books/"+encodeURI(book.id),
+          "url":"http://127.0.0.1:5000/books/"+encodeURI(book.id),
           "method":"PUT",
           "data":JSON.stringify(book),
           "dataType":"JSON",
@@ -198,7 +199,7 @@
   function deleteBookAjax(id){
       //console.log(JSON.stringify('deleting'+id));
       $.ajax({
-          "url":"https://127.0.0.1:5000/books/"+encodeURI(id),
+          "url":"http://127.0.0.1:5000/books/"+encodeURI(id),
           "method":"DELETE",
           "data":"",
           "dataType":"JSON",

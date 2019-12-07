@@ -1,15 +1,16 @@
 """sample database interaction programme for books"""
 
 import mysql.connector
+import dbconfig as cfg # import a config file "dbconfig.py"
 class BookDAO:
   db = ""
 
   def __init__(self):
     self.db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="ch6310",
-    database="datarepresentation"
+    host=cfg.mysql['host'],
+    user=cfg.mysql['username']
+    password=cfg.mysql['password']
+    database=cfg.mysql['database']
     )
 
   def create(self, values):

@@ -4,9 +4,6 @@ from bookDAO import bookDAO # file where the functions to interact with the data
 
 app = Flask(__name__,static_url_path='',static_folder='.')
 
-# @app.route('/')
-# def index():
-#   return "Hello, world"
 
 @app.route('/books')
 def getAll():
