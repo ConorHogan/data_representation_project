@@ -1,0 +1,4 @@
+# add users database table 
+# add user registration form https://pythonprogramming.net/flask-registration-tutorial/?completed=/flask-user-registration-form-tutorial/
+#only show tickets relating to a particular user (join on username) - need add user ID column to tickets table 
+# upload to python anywhere

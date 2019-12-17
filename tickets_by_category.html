@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tickets by Category</title>
+	<!--Link to stylesheet and d3.js  -->
+	<meta charset="utf-8" content="width=device-width, intitial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<!--Header with links to other pages  -->
+	<header>
+	<div class="head_container">
+		<nav>
+			<ul>
+				<li><a href="1.Homepage.html">Homepage</a></li>
+				<li><a href="2.Tickets_per_Month.html">Tickets per Month</a></li>
+				<li><a href="3.Tickets_by_Category.html">Tickets by Category</a></li>
+			</ul>
+		</nav>
+	</div>
+	</header>
+	<!--Main text seciont of the categories page-->
+	<main id="piePage">
+		<div id="portalText">
+			<div id="csAnalysis">
+				<article class="chartArticle">
+					<h1 align="center">TICKETS PER CATEGORY</h1>
+					<br />
+					<!--Section explaining what the page is for.-->
+					<div id="csTicketBlurb">
+						<p>
+						On this page you have the ability to generate a donut chart showing the count of tickets per category represented as percentage of the total tickets.
+						Please note that you must manually update the count of tickets per category using the "Update Counts per Category" form below.
+						</p>
+						<br />
+						<p>
+							Please follow the below instructions in order to generate the donut chart.
+						</p>
+					</div>
+					<!--Instruction on how to generate the chart and it's controls-->
+					<div class="instructionsListWrap">
+						<div class="instructionsList">
+							<h2>Category Chart Instructions:</h2>
+							<br />
+							<ol>
+								<li>Enter Counts of Tickets per each category in the "Update Counts per Category" bar.</li>
+								<li>Click the "Update" button to submit counts.</li>
+								<li>Select the size of the graph you would like to generate  using the "Select Chart Radius" dropdown.</li>
+								<li>Choose a color for each category.</li>
+								<li>Click the "Show Chart" button to render the chart.</li>
+							</ol>
+						</div>
+					</div>
+				</article>
+			</div>
+		</div>
+		<!--Div containg chart and it's controls / inputs-->
+		<div id="analysisArea">
+			<div id="controlsWrapper">
+				<!--Form for user to choose the chart size and colors to be shown for each category(value)-->
+				<div id="pieControls">
+					<br />
+					<h3>Choose Chart Style</h3>
+					<br />
+					<form id="pieupdateForm" action="" onsubmit="return false;">
+					Select Chart Radius:
+					<select id="pieRadius">
+						<option value="100">100 Pixels</option>
+						<option value="200">200 Pixels</option>
+						<option value="300">300 Pixels</option>
+					</select>
+					<br />
+					<br />
+					High Color:
+					<input type="color" id="highColor">
+					Medium Color:
+					<input type="color" id="medColor">
+					Low Color:
+					<input type="color" id="lowColor">
+					<!--Submit button to create chart using code in script section below-->
+					<input type="submit" class="chartButton" value="Show Chart" onclick="drawPie();">
+					</form>
+				</div>
+			</div>
+			<div id="pieWrapper">
+				<!--Div where the chart will be created-->
+				<div id="pieChart">
+				</div>
+			</div>
+		</div>
+	</main>
+	<script>
+		function drawPie(){
+    host= "http://127.0.0.1:5000" // window.location.origin
+    $.ajax({
+        "url": host+"/counts",
+        "method":"GET",
+        "data":"",
+        "dataType":"JSON",
+        "success":function(result){
+						var data = result
+						var r = document.getElementById("pieRadius").value;
+						var w = r*2;
+						var h = r*2;
+						var inner = r/2;
+						// getting color values from form
+						var highColor = document.getElementById("highColor").value;
+						var medColor = document.getElementById("medColor").value;
+						var lowColor = document.getElementById("lowColor").value;
+
+
+						var color = d3.scale.ordinal() // colour of elements
+								.range([highColor, medColor, lowColor]);
+
+						d3.select("#pieChart").selectAll("*").remove(); // clear old piechart if one has already been created
+
+						let canvas = d3.select("#pieChart").append("svg") // create svg container/canvas
+								.attr("width", w)
+								.attr("height", h);
+
+						let group = canvas.append("g") // set the size of the area where the chart will be created
+								.attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+
+						var arc = d3.svg.arc() //set size of the piechart
+								.outerRadius(r)
+								.innerRadius(inner);
+
+						var pie = d3.layout.pie()
+								.value(function (d) {return d.count;});
+
+						let arcs = group.selectAll(".arc")
+								.data(pie(data)) // bing data to the selection in pie layout
+								.enter()
+								.append("g")
+								.attr("class", "arc");
+
+						// append path to each object
+						arcs.append("path")
+								.attr("d", arc) //fetch from arc generator above arc and arcs
+								.attr("fill", function (d) { return color(d.data.Priority); }); // d.data just gets the value e.g 10
+
+						arcs.append("text")
+								.attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")";}) //chart labels
+								.attr("text-anchor", "middle")
+								.attr("font-size", "1.5em")
+								.attr("fill", "white")
+								.text(function (d) { return d.data.Priority; });
+		}
+        ,
+        "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+        }
+    });
+	}
+
+
+	</script>
+</body>
+</html>

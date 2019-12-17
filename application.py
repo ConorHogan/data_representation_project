@@ -1,7 +1,6 @@
 #!flask/bin/python
 from flask import Flask, jsonify, request, abort
 from ticketDAO import ticketDAO # file where the functions to interact with the database are stored
-
 app = Flask(__name__,static_url_path='',static_folder='.')
 
 
@@ -16,7 +15,6 @@ def findByID(id):
   foundTicket = ticketDAO.findByID(id)
   return jsonify(foundTicket)
 # C:\Users\Conor>curl "http://127.0.0.1:5000/tickets/1"
-
 
 @app.route('/tickets', methods=['POST'])
 def create():
@@ -62,6 +60,11 @@ def delete(id):
   return jsonify({"done":True})
 # C:\Users\Conor>curl -X DELETE "http://127.0.0.1:5000/tickets/3"
 # {"done":true}
+
+@app.route('/counts')
+def getCounts():
+  results = ticketDAO.getCount()
+  return jsonify(results)
 
 if __name__=='__main__':
   app.run(debug=True)

@@ -54,6 +54,16 @@ class TicketDAO:
     self.db.commit()
     print("delete done")
 
+  def getCount(self):
+    cursor = self.db.cursor()
+    sql = "select count(id) as count, Priority from tickets group by Priority"
+    cursor.execute(sql)
+    results = cursor.fetchall() # get from database
+    returnArray = []
+    for result in results:
+      returnArray.append(self.countsToDict(result))
+    return returnArray
+
   def convertToDictionary(self, result):
     colnames=['id','Company','Description','Priority']
     item = {}
@@ -64,4 +74,12 @@ class TicketDAO:
         item[colName] = value
     return item
 
+  def countsToDict(self, result):
+    colnames=['count', 'Priority']
+    item = {}
+    if result:
+      for i, colName in enumerate(colnames):
+        value = result[i]
+        item[colName] = value
+    return item
 ticketDAO = TicketDAO()
