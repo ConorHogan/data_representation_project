@@ -1,54 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tickets by Category</title>
+	<title>Priority Dashboard</title>
 	<!--Link to stylesheet and d3.js  -->
 	<meta charset="utf-8" content="width=device-width, intitial-scale=1">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<!--Header with links to other pages  -->
-	<header>
-	<div class="head_container">
-		<nav>
-			<ul>
-				<li><a href="1.Homepage.html">Homepage</a></li>
-				<li><a href="2.Tickets_per_Month.html">Tickets per Month</a></li>
-				<li><a href="3.Tickets_by_Category.html">Tickets by Category</a></li>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:50px">
+		<a class="navbar-brand" href="ticketviewer.html">Help Desk</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarText">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="ticketviewer.html">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="dashboard.html">Dashboard</a>
+				</li>
 			</ul>
-		</nav>
-	</div>
-	</header>
-	<!--Main text seciont of the categories page-->
+			<span class="navbar-text">
+				Help Desk Ticket Management Centre
+			</span>
+		</div>
+	</nav>
 	<main id="piePage">
 		<div id="portalText">
 			<div id="csAnalysis">
 				<article class="chartArticle">
-					<h1 align="center">TICKETS PER CATEGORY</h1>
+					<h1 align="center">PRIORITY DASHBOARD</h1>
 					<br />
 					<!--Section explaining what the page is for.-->
 					<div id="csTicketBlurb">
 						<p>
-						On this page you have the ability to generate a donut chart showing the count of tickets per category represented as percentage of the total tickets.
-						Please note that you must manually update the count of tickets per category using the "Update Counts per Category" form below.
+						On this page you have the ability to generate a donut chart showing the count of tickets by priority represented as percentage of the total tickets..
 						</p>
 						<br />
 						<p>
 							Please follow the below instructions in order to generate the donut chart.
 						</p>
 					</div>
-					<!--Instruction on how to generate the chart and it's controls-->
 					<div class="instructionsListWrap">
 						<div class="instructionsList">
-							<h2>Category Chart Instructions:</h2>
+							<h2>Priority Chart Instructions:</h2>
 							<br />
 							<ol>
-								<li>Enter Counts of Tickets per each category in the "Update Counts per Category" bar.</li>
-								<li>Click the "Update" button to submit counts.</li>
 								<li>Select the size of the graph you would like to generate  using the "Select Chart Radius" dropdown.</li>
-								<li>Choose a color for each category.</li>
+								<li>Choose a color for each priority.</li>
 								<li>Click the "Show Chart" button to render the chart.</li>
 							</ol>
 						</div>
@@ -57,16 +60,16 @@
 			</div>
 		</div>
 		<!--Div containg chart and it's controls / inputs-->
-		<div id="analysisArea">
-			<div id="controlsWrapper">
+		<div>
+			<div>
 				<!--Form for user to choose the chart size and colors to be shown for each category(value)-->
-				<div id="pieControls">
+				<div>
 					<br />
 					<h3>Choose Chart Style</h3>
 					<br />
-					<form id="pieupdateForm" action="" onsubmit="return false;">
+					<form class="form-group"  action="" onsubmit="return false;">
 					Select Chart Radius:
-					<select id="pieRadius">
+					<select class="form-group" id="pieRadius">
 						<option value="100">100 Pixels</option>
 						<option value="200">200 Pixels</option>
 						<option value="300">300 Pixels</option>
@@ -74,17 +77,17 @@
 					<br />
 					<br />
 					High Color:
-					<input type="color" id="highColor">
+					<input class="form-group" type="color" id="highColor">
 					Medium Color:
-					<input type="color" id="medColor">
+					<input  class="form-group"type="color" id="medColor">
 					Low Color:
-					<input type="color" id="lowColor">
+					<input  class="form-group"type="color" id="lowColor">
 					<!--Submit button to create chart using code in script section below-->
-					<input type="submit" class="chartButton" value="Show Chart" onclick="drawPie();">
+					<input type="submit" class="btn btn-primary" value="Show Chart" onclick="drawPie();">
 					</form>
 				</div>
 			</div>
-			<div id="pieWrapper">
+			<div>
 				<!--Div where the chart will be created-->
 				<div id="pieChart">
 				</div>
@@ -92,6 +95,7 @@
 		</div>
 	</main>
 	<script>
+
 		function drawPie(){
     host= "http://127.0.0.1:5000" // window.location.origin
     $.ajax({
@@ -154,7 +158,6 @@
         }
     });
 	}
-
 
 	</script>
 </body>

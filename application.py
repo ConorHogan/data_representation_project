@@ -44,7 +44,7 @@ def update(id):
   # if 'Price' in reqJson and type(reqJson['Price']) is not int:
   #   abort(400)
   if 'Company' in reqJson:
-    foundTicket['Title'] = reqJson['Title']
+    foundTicket['Company'] = reqJson['Company']
   if 'Description' in reqJson:
     foundTicket['Description'] = reqJson['Description']
   if 'Priority' in reqJson:
@@ -61,9 +61,14 @@ def delete(id):
 # C:\Users\Conor>curl -X DELETE "http://127.0.0.1:5000/tickets/3"
 # {"done":true}
 
-@app.route('/counts')
+@app.route('/counts') # gives counts of tickets by priority for piechart
 def getCounts():
   results = ticketDAO.getCount()
+  return jsonify(results)
+
+@app.route('/countsperowner') # gives counts of tickets by owner
+def getCountperOwner():
+  results = ticketDAO.getCountPerOwner()
   return jsonify(results)
 
 if __name__=='__main__':

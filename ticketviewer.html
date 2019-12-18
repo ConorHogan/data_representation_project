@@ -7,15 +7,49 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
-      <h1>Tickets</h1>
-      <div> <button  id="showCreateButton" class="btn btn-primary btn-block" onclick="showCreate()">Create</button></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:50px">
+        <a class="navbar-brand" href="ticketviewer.html">Help Desk</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="ticketviewer.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </li>
+          </ul>
+          <span class="navbar-text">
+            Help Desk Ticket Management Centre
+          </span>
+        </div>
+      </nav>
+      <article>
+        <h1 align="center">TICKETS CENTRE</h1>
+        <br />
+        <!--Section explaining what the page is for.-->
+        <div>
+            <p>
+            On this page you have the ability to log new tickets via the "Create a Ticket" button. Please note that when you create a new ticket the system will automatically assign an owner from one of our five customer service operators.
+            </p>
+            <p>
+            Displayed beneath this button is a table of current tickets along with their status and owner. These tickets can be update or deleted using the "Update" and "Delete" buttons. Please note that you cannot reassign the owner.
+
+            </p>
+        </div>
+    </article>
+
+      <div> <button  id="showCreateButton" class="btn btn-primary btn-block" onclick="showCreate()">Create a Ticket</button></divpadding-top:50px>
       <div>
           <table class="table" id="ticketTable">
               <tr>
                       <th>id</th>
                       <th>Company</th>
-                      <th>Decription</th>
+                      <th>Description</th>
                       <th>Priority</th>
+                      <th>Owner</th>
                       <th>Update</th>
                       <th>Delete</th>
               </tr>
@@ -72,6 +106,7 @@
       ticket.Priority = $("#p_selector option:selected").text()
       console.log(JSON.stringify(ticket))
       createTicketAjax(ticket)
+      window.location.reload()
   }
   function doUpdate(){
       var ticket = getTicketFromForm();
@@ -102,9 +137,11 @@
       var cell4 = rowElement.insertCell(3);
       cell4.innerHTML = ticket.Priority
       var cell5 = rowElement.insertCell(4);
-      cell5.innerHTML = '<button class="btn btn-success btn-sm" onclick="showUpdate(this)">Update</button>'
+      cell5.innerHTML = ticket.Owner
       var cell6 = rowElement.insertCell(5);
-      cell6.innerHTML = '<button class="btn btn-danger btn-sm" onclick=doDelete(this)>Delete</button>'
+      cell6.innerHTML = '<button class="btn btn-success btn-sm" onclick="showUpdate(this)">Update</button>'
+      var cell7 = rowElement.insertCell(6);
+      cell7.innerHTML = '<button class="btn btn-danger btn-sm" onclick=doDelete(this)>Delete</button>'
   }
   function clearForm(){
       var form = document.getElementById('createUpdateForm')
@@ -189,7 +226,7 @@
     console.log(JSON.stringify(ticket));
     host= "http://127.0.0.1:5000"//window.location.origin
       $.ajax({
-          "url":host+"/Tickets/"+encodeURI(ticket.id),
+          "url":host+"/tickets/"+encodeURI(ticket.id),
           "method":"PUT",
           "data":JSON.stringify(ticket),
           "dataType":"JSON",
