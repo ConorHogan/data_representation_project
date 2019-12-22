@@ -66,7 +66,7 @@ class TicketDAO:
 
   def getCountPerOwner(self): # get the count of ticket by priority for pie chart
     cursor = self.db.cursor()
-    sql = "select owners.firstname, count(tickets.id) as counts from owners inner join tickets on owners.owner_id=tickets.ownerid group by owners.firstname"
+    sql = "select owners.owner_id, owners.firstname, count(tickets.id) as counts from owners inner join tickets on owners.owner_id=tickets.ownerid group by owners.firstname"
     cursor.execute(sql)
     results = cursor.fetchall() # get from database
     returnArray = []
@@ -94,7 +94,7 @@ class TicketDAO:
     return item
 
   def ownercountsToDict(self, result):
-    colnames=['firstname', 'counts']
+    colnames=['id','firstname', 'counts']
     item = {}
     if result:
       for i, colName in enumerate(colnames):

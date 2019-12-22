@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:50px">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:25px">
         <a class="navbar-brand" href="ticketviewer.html">Help Desk</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -26,11 +26,12 @@
           </span>
         </div>
       </nav>
+      <main style= "padding:25px 75px 75px 75px;">
       <article>
-        <h1 align="center">TICKETS CENTRE</h1>
+        <h1 align="center" style="color: rgba(47,82,143)">TICKETS CENTRE</h1>
         <br />
         <!--Section explaining what the page is for.-->
-        <div>
+        <div style="margin: 0px 0px 25px 25px;">
             <p>
             On this page you have the ability to log new tickets via the "Create a Ticket" button. Please note that when you create a new ticket the system will automatically assign an owner from one of our five customer service operators.
             </p>
@@ -41,9 +42,11 @@
         </div>
     </article>
 
-      <div> <button  id="showCreateButton" class="btn btn-primary btn-block" onclick="showCreate()">Create a Ticket</button></divpadding-top:50px>
-      <div>
+      <div> <button  id="showCreateButton" class="btn btn-primary btn-block" onclick="showCreate()"><strong>Create a Ticket</strong></button></divpadding-top:50px>
+      <div style="padding-top: 25px;">
           <table class="table" id="ticketTable">
+            <caption>Summary of Existing Tickets</caption>
+            <thead class="thead-dark">
               <tr>
                       <th>id</th>
                       <th>Company</th>
@@ -53,6 +56,7 @@
                       <th>Update</th>
                       <th>Delete</th>
               </tr>
+            </thead>
           </table>
       </div>
       <div class="form-group" id='createUpdateForm' style="display: none">
@@ -68,6 +72,7 @@
               <span><button class="btn btn-success btn-sm"  id="doCreateButton" onclick="doCreate()">Create</button></span>
               <span><button class="btn btn-warning btn-sm" id="doUpdateButton" onclick="doUpdate()">Update</button></span>
       </div>
+    </main>
   </body>
   <script>
   function showCreate(){

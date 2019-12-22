@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Priority Dashboard</title>
+	<title>Tickets Dashboard</title>
 	<!--Link to stylesheet and d3.js  -->
 	<meta charset="utf-8" content="width=device-width, intitial-scale=1">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:50px">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom:25px">
 		<a class="navbar-brand" href="ticketviewer.html">Help Desk</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -29,26 +29,38 @@
 			</span>
 		</div>
 	</nav>
-	<main id="piePage">
+	<main id="piePage" style= "padding:25px 75px 75px 75px" >
 		<div id="portalText">
 			<div id="csAnalysis">
 				<article class="chartArticle">
-					<h1 align="center">PRIORITY DASHBOARD</h1>
+					<h1 style="color: rgba(47,82,143)" align="center">DASHBOARD</h1>
 					<br />
 					<!--Section explaining what the page is for.-->
 					<div id="csTicketBlurb">
 						<p>
-						On this page you have the ability to generate a donut chart showing the count of tickets by priority represented as percentage of the total tickets..
+						This page gives an overview of the counts of tickets assingned to each operator(Owner) and also allows you to generate a piechart showing the breakdown of the number of tickets in each "Priority" category (High, Medium, Low).
 						</p>
-						<br />
-						<p>
-							Please follow the below instructions in order to generate the donut chart.
-						</p>
+
 					</div>
+					<div style="margin: 0px 0px 50px 50px ;">
+						<table class="table table-sm" id="ownerTable">
+							<caption>Counts of Tickets Assigned to each Person</caption>
+							<thead class="thead-dark">
+								<tr>
+												<th>id</th>
+												<th>Owner</th>
+												<th>Number of Tickets</th>
+								</tr>
+							</thead>
+						</table>
+				</div>
 					<div class="instructionsListWrap">
 						<div class="instructionsList">
-							<h2>Priority Chart Instructions:</h2>
+							<h2>PRIORITY CHART INSTRUCTIONS:</h2>
 							<br />
+							<p>
+								Please follow the below instructions in order to generate the donut chart:
+							</p>
 							<ol>
 								<li>Select the size of the graph you would like to generate  using the "Select Chart Radius" dropdown.</li>
 								<li>Choose a color for each priority.</li>
@@ -61,21 +73,19 @@
 		</div>
 		<!--Div containg chart and it's controls / inputs-->
 		<div>
-			<div>
+			<div style="width:100%;height:150px; text-align: center;background-color: silver; border-radius: 20px; font-weight: bold;">
 				<!--Form for user to choose the chart size and colors to be shown for each category(value)-->
 				<div>
 					<br />
-					<h3>Choose Chart Style</h3>
+					<h3>CHOOSE CHART STYLE</h3>
 					<br />
-					<form class="form-group"  action="" onsubmit="return false;">
+					<form class="form-group" action="" onsubmit="return false;">
 					Select Chart Radius:
 					<select class="form-group" id="pieRadius">
 						<option value="100">100 Pixels</option>
 						<option value="200">200 Pixels</option>
 						<option value="300">300 Pixels</option>
 					</select>
-					<br />
-					<br />
 					High Color:
 					<input class="form-group" type="color" id="highColor">
 					Medium Color:
@@ -161,4 +171,38 @@
 
 	</script>
 </body>
+	<script>
+		function addOwnerToTable(owner){
+					var tableElement = document.getElementById('ownerTable')
+					var rowElement = tableElement.insertRow(-1)
+					rowElement.setAttribute('id',owner.id)
+					var cell1 = rowElement.insertCell(0);
+					cell1.innerHTML = owner.id
+					var cell2 = rowElement.insertCell(1);
+					cell2.innerHTML = owner.firstname
+					var cell3 = rowElement.insertCell(2);
+					cell3.innerHTML = owner.counts
+		}
+
+	  function getAllOwner(){
+    host= "http://127.0.0.1:5000" // window.location.origin
+    $.ajax({
+        "url": host+"/countsperowner",
+        "method":"GET",
+        "data":"",
+        "dataType":"JSON",
+        "success":function(result){
+            console.log(result);
+            for (owner of result){
+                addOwnerToTable(owner);
+            }
+        },
+        "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+        }
+    });
+  }
+	getAllOwner()
+
+	</script>
 </html>
