@@ -106,7 +106,7 @@
 	<script>
 
 		function drawPie(){
-    host= "http://127.0.0.1:5000" // window.location.origin
+    host= window.location.origin // window.location.origin
     $.ajax({
         "url": host+"/counts",
         "method":"GET",
@@ -184,7 +184,7 @@
 		}
 
 	  function getAllOwner(){
-    host= "http://127.0.0.1:5000" // window.location.origin
+    host= window.location.origin // window.location.origin
     $.ajax({
         "url": host+"/countsperowner",
         "method":"GET",

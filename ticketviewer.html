@@ -189,7 +189,7 @@
       return ticket
   }
   function getAllAjax(){
-    host= "http://127.0.0.1:5000" // window.location.origin
+    host= window.location.origin // window.location.origin
     $.ajax({
         "url": host+"/tickets",
         "method":"GET",
@@ -208,7 +208,7 @@
   }
   function createTicketAjax(ticket){
       console.log(JSON.stringify(ticket));
-      host= "http://127.0.0.1:5000" //window.location.origin
+      host= window.location.origin //window.location.origin
       $.ajax({
           "url":host+"/tickets",
           "method":"POST",
@@ -229,7 +229,7 @@
   }
   function updateTicketAjax(ticket){
     console.log(JSON.stringify(ticket));
-    host= "http://127.0.0.1:5000"//window.location.origin
+    host= window.location.origin //window.location.origin
       $.ajax({
           "url":host+"/tickets/"+encodeURI(ticket.id),
           "method":"PUT",
@@ -246,7 +246,7 @@
   }
   function deleteTicketAjax(id){
       //console.log(JSON.stringify('deleting'+id));
-      host="http://127.0.0.1:5000"// window.location.origin
+      host=window.location.origin // window.location.origin
       $.ajax({
           "url":host+"/tickets/"+encodeURI(id),
           "method":"DELETE",
