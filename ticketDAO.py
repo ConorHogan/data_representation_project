@@ -1,7 +1,7 @@
 """database interaction for CS tickets"""
 
 import mysql.connector
-import dbconfig as cfg # import a config file "dbconfig.py"
+import appconfig as cfg # import a config file "dbconfig.py"
 class TicketDAO:
   db = ""
 
