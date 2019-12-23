@@ -1,8 +1,8 @@
 mysql = {
-  'host':"localhost", #chogangmit.mysql.pythonanywhere-services.com
-  'username':"root", # chogangmit
-  'password':"ch6310", # ch63107044
-  'database': "datarepresentation" # chogangmit$datarepresentation
+  'host':"chogandatarep.mysql.pythonanywhere-services.com", 
+  'username':"chogandatarep", 
+  'password':"ch63107044", 
+  'database': "chogandatarep$datarepresentation" 
 }
 
-auth = {'username':"conor", 'password':"letmein123"}
+auth = {'username':"admin", 'password':"letmein123"}

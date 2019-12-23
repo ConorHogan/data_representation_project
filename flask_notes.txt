@@ -1,7 +1,0 @@
-D:\Data_Analytics\Data_repres\0Project\data_representation_project>.\database_venv\Scripts\activate.bat
-
-(database_venv) D:\Data_Analytics\Data_repres\0Project\data_representation_project>set FLASK_APP=application
-
-(database_venv) D:\Data_Analytics\Data_repres\0Project\data_representation_project>set FLASK_ENV=development
-
-(database_venv) D:\Data_Analytics\Data_repres\0Project\data_representation_project>flask run
