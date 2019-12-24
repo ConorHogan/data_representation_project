@@ -21,21 +21,21 @@ def auth_required(f):
 def getAll():
   results = ticketDAO.getAll()
   return jsonify(results)
-# C:\Users\Conor>curl "http://127.0.0.1:5000/tickets"
+
 
 @app.route('/tickets/<int:id>')
 @auth_required
 def findByID(id):
   foundTicket = ticketDAO.findByID(id)
   return jsonify(foundTicket)
-# C:\Users\Conor>curl "http://127.0.0.1:5000/tickets/1"
+
 
 @app.route('/tickets', methods=['POST'])
 @auth_required
 def create():
   if not request.json:
     abort(400)
-  # other checking e.g properly formated
+
   ticket = {
     "Company":request.json['Company'],
     "Description":request.json['Description'],
@@ -45,7 +45,6 @@ def create():
   newID = ticketDAO.create(values)
   ticket['id'] = newID
   return jsonify(ticket)
-# curl -i -H "Content-Type:application/json" -X POST -d "{\"Company\":\"Google\",\"Description\":\"My tummy hurts\",\"Priority\":\"High\",\"Due Date\":\"2019-10-30\"}" http://127.0.0.1:5000/tickets
 
 
 @app.route('/tickets/<int:id>', methods=['PUT'])
@@ -57,8 +56,6 @@ def update(id):
   if not request.json:
     abort(400)
   reqJson = request.json
-  # if 'Price' in reqJson and type(reqJson['Price']) is not int:
-  #   abort(400)
   if 'Company' in reqJson:
     foundTicket['Company'] = reqJson['Company']
   if 'Description' in reqJson:
@@ -68,15 +65,12 @@ def update(id):
   values = (foundTicket['Company'],foundTicket['Description'], foundTicket['Priority'],foundTicket['id'])
   ticketDAO.update(values)
   return jsonify(foundTicket)
-# C:\Users\Conor>curl -i -H "Content-Type:application/json" -X PUT -d "{\"Due Date\":\"2017-12-05\"}" http://127.0.0.1:5000/tickets/3
 
 @app.route('/tickets/<int:id>', methods=['DELETE'])
 @auth_required
 def delete(id):
   ticketDAO.delete(id)
   return jsonify({"done":True})
-# C:\Users\Conor>curl -X DELETE "http://127.0.0.1:5000/tickets/3"
-# {"done":true}
 
 @app.route('/counts') # gives counts of tickets by priority for piechart
 @auth_required

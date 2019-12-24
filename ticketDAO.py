@@ -34,7 +34,7 @@ class TicketDAO:
   def findByID(self, id):
     cursor = self.db.cursor()
     sql = "select tickets.id, tickets.company, tickets.description, tickets.priority, concat(owners.firstname, ' ', owners.lastname) as owner  from tickets left join owners on tickets.ownerid=owners.owner_id where id = %s"
-    values = (id,) # values must be a tuple, hence the comma
+    values = (id,) 
 
     cursor.execute(sql,values)
     result = cursor.fetchone()
