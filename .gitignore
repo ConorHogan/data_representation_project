@@ -104,6 +104,10 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+#vscode
+.vscode
+
+
 
 # Backups
 /Backup_files

@@ -5,7 +5,7 @@ Project Repository for DATA REPRESENTATION module
 Please note that a live version of the API built for this project, the app that consumes it, and the web interface are available at the below address:
 http://chogandatarep.pythonanywhere.com/ticketviewer.html
 
-In order to access the live version of the project you will need to first login with the below credentials:
+In order to access the live version of the project you will need to login with the below credentials when the page is first loaded:
 
 USERNAME: admin
 
@@ -48,4 +48,7 @@ File containing credentials for the Pythonanywhere SQL database and the username
 ## requirements.txt
 Contains the list of packages that need to be installed in order for the Flask server to work.
 
+## dump.sql
+This contains the SQL commands required to recreate the database used in this project. There should be no need to use this as the database is hosted online as part of the Pythonanywhere app listed above.
+However, if there is some issue with the live version of the app, this can be used along with the other files above to recreate the project offline.
 
